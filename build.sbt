@@ -30,8 +30,7 @@ artifact in (Compile, assembly) := {
   art.copy(`classifier` = Some("assembly"))
 }
 //assemblyJarName in assembly := "test-lambda.jar"
-
-assemblyOutputPath in assembly := baseDirectory.value/"spark-jars"
+assemblyOutputPath in assembly := file( s"src/main/resources/spark-jars/${name.value}-${version.value}.jar" )
 assemblyMergeStrategy in assembly :=
   {
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
