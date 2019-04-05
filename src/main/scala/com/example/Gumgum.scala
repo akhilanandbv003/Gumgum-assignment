@@ -10,7 +10,9 @@ object Gumgum {
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    val df = spark.read.json("src/main/resources/ad_data.json")
+    val fileLocation = args(0)
+//    val df = spark.read.json("src/main/resources/ad_data.json")
+    val df = spark.read.json(fileLocation)
     nextPageUrl(df)
   }
 

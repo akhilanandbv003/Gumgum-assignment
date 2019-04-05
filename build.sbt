@@ -24,3 +24,16 @@ libraryDependencies ++= Seq(
   "MrPowers" % "spark-fast-tests" % "0.17.1-s_2.12"
 
 )
+
+artifact in (Compile, assembly) := {
+  val art = (artifact in (Compile, assembly)).value
+  art.copy(`classifier` = Some("assembly"))
+}
+//assemblyJarName in assembly := "test-lambda.jar"
+
+assemblyOutputPath in assembly := baseDirectory.value/"spark-jars"
+assemblyMergeStrategy in assembly :=
+  {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x => MergeStrategy.first
+  }
