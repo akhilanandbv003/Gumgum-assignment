@@ -1,0 +1,24 @@
+ def daysOfWorkers(spark: SparkSession)={
+
+    val classes = spark.createDataFrame(Seq(
+      (1,"Amy","cs101","000001"),
+      (2,"jack","cs401","000002"),
+      (3,"bob","cs101","000003"),
+      (3,"bob","cs401","000004"),
+      (1,"Amy","cs401","000005")
+    )).toDF("id","name","class","timestamp")
+
+
+    classes.createOrReplaceTempView("sem_classes")
+
+    spark.sql("select t1.* , t2.class as nextClass ,t2.timestamp  from sem_classes t1 join sem_classes t2 on t1.id = t2.id where t2.timestamp > t1.timestamp").show(false)
+
+    classes.as("c1").join(classes.as("c2"), $"c1.id" <=> $"c2.id" && $"c2.timestamp" > $"c1.timestamp").show(false)
+    val data = classes.as("c1").join(classes.as("c2"), $"c1.id" <=> $"c2.id" && $"c2.timestamp" > $"c1.timestamp" , "left")
+
+    data.select($"c1.*",$"c2.class".as("nextClass")).show(false)
+  }
+
+
+//  df.createOrReplaceTempView("tbl")
+//  spark.sql("select t1.pageUrl,t1.timestamp, t2.pageUrl as nextPageUrl ,t2.timestamp  from tbl t1 join tbl t2 on t1.visitorId = t2.visitorId where t2.timestamp > t1.timestamp").show(false)
