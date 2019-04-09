@@ -5,17 +5,20 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 object Gumgum {
   val spark = SparkSession
     .builder().master("local[*]").appName("Gumgum-assignment")
+    .config("spark.sql.cbo.enabled",true)
+    .config("spark.sql.cbo.joinReorder.enabled",true)
     .getOrCreate()
 
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    val fileLocation = args(0)
+    val inputFileLocation = args(0)
+    val outputFileLocation = args(1)
     //    val fileLocation = "src/main/resources/part-00000-732eeb74-f251-4f96-85d5-5c9ae95ba709-c000.txt"
 
-    val inputDf = readJsonFile(spark, fileLocation)
+    val inputDf = readJsonFile(spark, inputFileLocation)
     val output: DataFrame = nextPageUrl(inputDf)
-    saveAsJsonFile(output, fileLocation)
+    saveAsJsonFile(output, outputFileLocation)
   }
 
   def readJsonFile(spark: SparkSession, fileLocation: String) = {

@@ -22,3 +22,13 @@
 
 //  df.createOrReplaceTempView("tbl")
 //  spark.sql("select t1.pageUrl,t1.timestamp, t2.pageUrl as nextPageUrl ,t2.timestamp  from tbl t1 join tbl t2 on t1.visitorId = t2.visitorId where t2.timestamp > t1.timestamp").show(false)
+
+
+
+How to run?
+
+docker run -dit --rm --name mySparkBaseImage -v ~/Desktop/myGithubRepos/Gumgum-assignment/src/main/resources/:/spark-resources spark-base:2.4
+spark-submit --deploy-mode cluster --master yarn
+--class ReadFromS3 s3a://cam360-us-east-1-285453578300/tmp-dir/spark-submit-for-emr_2.12-0.1.jar --num-executors 10 --executor-cores 5 --executor-memory 2g
+
+spark-submit --class com.example.Gumgum /spark-resources/spark-jars/Gumgum-assignment-0.0.1.jar /spark-resources/input/part-00000-732eeb74-f251-4f96-85d5-5c9ae95ba709-c000.txt /output1
